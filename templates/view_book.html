@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel= "stylesheet" type= "text/css" href= "../static/styles/styles.css">
+</head>
+<body>
+    <header>
+        <font color="white"><img style="height:50px; width:auto;" src="../static/Auca_logo.png" alt="Auca Logo"></font>
+        <font color="white"><label>Photobooks Online</label></font>
+        <nav>
+            <ul class="nav__links">
+                <li><a href="#">Log in</a></li>
+                <li><a href="#">Sign up</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div style="margin-left: 20px;" align="left">
+        <font style="color:white;">
+            Photobook name: <br>
+            Author: <br>
+            Date Created: <br>
+            Description: <br>
+        </font>
+    </div>
+    <div class="cards">
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+    </div>
+    <footer>
+        <a href="{{ url_for('index') }}">Back</a>
+        <center>
+            <a href="#">Edit</a>
+            <a href="#">Delete</a>
+        </center>
+        <a href="#">Next page</a>
+    </footer>
+</body>
+</html>
