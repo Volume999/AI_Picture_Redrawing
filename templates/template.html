@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+<body>
+    <header>
+        <font color="white"><img style="height:50px; width:auto;" src="{{ url_for('static', filename='Auca_logo.png') }}" alt="Auca Logo"></font>
+        <font color="white"><label>Photobooks Online</label></font>
+        <nav>
+            <ul class="nav__links">
+                <li><a href="#">Log in</a></li>
+                <li><a href="#">Sign up</a></li>
+            </ul>
+        </nav>
+    </header>
+    {% block body %} {% endblock %}
+</body>
+</html>

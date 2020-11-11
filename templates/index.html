@@ -1,36 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel= "stylesheet" type= "text/css" href= "../static/styles/styles.css">
-</head>
-<body>
-    <header>
-        <font color="white"><img style="height:50px; width:auto;" src="../static/Auca_logo.png" alt="Auca Logo"></font>
-        <font color="white"><label>Photobooks Online</label></font>
-        <nav>
-            <ul class="nav__links">
-                <li><a href="#">Log in</a></li>
-                <li><a href="#">Sign up</a></li>
-            </ul>
-        </nav>
-    </header>
-    <div style="margin-left: 20px;">
-        <center>
-            <a href="#">Your Collection</a>
-            <a href="#">Public</a>
-            <a href="#">Following</a>
-        </center>
-        <a href="#">Add Photobook</a>
-    </div>
-    <div class="cards">
-        <a href="{{ url_for('view_book') }}"> <div class="square"></div> </a>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-    </div>
-</body>
-</html>
+{% extends 'template.html' %}
+{% block body %}
+<div style="margin-left: 20px;">
+    <center>
+        <a href="#">Your Collection</a>
+        <a href="#">Public</a>
+        <a href="#">Following</a>
+    </center>
+    <a href="#">Add Photobook</a>
+</div>
+<div class="cards">
+    <a href="{{ url_for('view_book') }}"> <div class="square"></div> </a>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+</div>
+{% endblock %}
