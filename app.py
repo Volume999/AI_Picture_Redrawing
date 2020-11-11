@@ -29,17 +29,16 @@ configure_uploads(app, photos)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    if request.method == 'POST' and 'photo' in request.files:
+    if request.method == 'POST':
+        photobook_name = request.form['book_name']
+        description = request.form['desc']
+        # Photos
         files = request.files.getlist("photo")
         filename = []
         for file in files:
             fn = photos.save(file)
-            with open(os.path.join(app.config['UPLOADED_PHOTOS_DEST'], fn), 'r+b') as f:
-                img = Image.open(f)
-                img = resizeimage.resize("thumbnail", img, [500, 500])
-                img.save(UPLOAD_PHOTO_DEST + '/resized_' + fn, img.format)
             filename.append(fn)
-        return ' '.join(filename)
+        return ' '.join([photobook_name, description, ' '.join(filename)])
     return render_template('upload.html')
 
 

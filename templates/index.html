@@ -1,12 +1,12 @@
 {% extends 'template.html' %}
 {% block body %}
 <div style="margin-left: 20px;">
-    <center>
+    <div style="text-align: center;">
         <a href="#">Your Collection</a>
         <a href="#">Public</a>
         <a href="#">Following</a>
-    </center>
-    <a href="#">Add Photobook</a>
+    </div>
+    <a href="{{ url_for('upload') }}">Add Photobook</a>
 </div>
 <div class="cards">
     <a href="{{ url_for('view_book') }}"> <div class="square"></div> </a>

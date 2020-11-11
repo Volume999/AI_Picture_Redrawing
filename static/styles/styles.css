@@ -20,7 +20,7 @@ li, a {
 
 .nav__links li {
     display: inline-block;
-    padding: 0px 20px;
+    padding: 0 20px;
 }
 
 .nav__links li a {
@@ -36,8 +36,8 @@ header, footer {
 }
 
 .square {
-  height: 500px;
-  width: 500px;
+  height: 100%;
+  width: 100%;
   border: 1px solid green;
 }
 
@@ -49,3 +49,20 @@ header, footer {
     margin-left: 5%;
 }
 
+#submitform * {
+    text-align: center;
+    margin: 25px;
+    padding: 10px;
+}
+
+#submitform button, input, select, textarea, label {
+    font-family: inherit;
+    font-size: 100%;
+    color: white;
+    height: auto;
+    width: 40%;
+}
+
+#submitform label:hover {
+    color:blue;
+}
