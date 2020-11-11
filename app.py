@@ -4,11 +4,40 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES
 from PIL import Image
 from resizeimage import resizeimage
 import os
+import Database
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(30), nullable=False)
+    password = db.Column(db.String(30), nullable=False)
+
+
+class Photobook(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(20), nullable=False)
+    description = db.Column(db.String(100), nullable=True)
+    ownerId = db.Column(db.Integer, nullable=False)
+    isPrivate = db.Column(db.Boolean, default=False)
+    dateCreated = db.Column(db.Date)
+    isDeleted = db.Column(db.Boolean, default=False)
+
+
+class Photo(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(1000), nullable=False)
+    photobookId = db.Column(db.Integer, nullable=False)
+
+
+class UserFollowsBooks(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    userId = db.Column(db.Integer, nullable=False)
+    photobookId = db.Column(db.Integer, nullable=False)
 
 
 @app.route('/')
