@@ -49,13 +49,13 @@ header, footer {
     margin-left: 5%;
 }
 
-#submitform * {
+.subform * {
     text-align: center;
     margin: 25px;
     padding: 10px;
 }
 
-#submitform button, input, select, textarea, label {
+.subform button, input, select, textarea, label {
     font-family: inherit;
     font-size: 100%;
     color: white;
@@ -63,6 +63,6 @@ header, footer {
     width: 40%;
 }
 
-#submitform label:hover {
+.subform label:hover {
     color:blue;
 }

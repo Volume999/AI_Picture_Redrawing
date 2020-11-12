@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    {% block title %} {% endblock %}
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/styles.css') }}">
 </head>
 <body>
     <header>
-        <font color="white"><img style="height:50px; width:auto;" src="{{ url_for('static', filename='Auca_logo.png') }}" alt="Auca Logo"></font>
-        <font color="white"><label>Photobooks Online</label></font>
+        <a href="{{ url_for('index') }}"><span style="color: white; "><img style="height:50px; width:auto;" src="{{ url_for('static', filename='Auca_logo.png') }}" alt="Auca Logo"></span></a>
+        <span style="color: white; "><label>Photobooks Online</label></span>
         <nav>
             <ul class="nav__links">
-                <li><a href="#">Log in</a></li>
-                <li><a href="#">Sign up</a></li>
+                <li><a href="{{ url_for('login') }}">Log in</a></li>
+                <li><a href="{{ url_for('register') }}">Sign up</a></li>
             </ul>
         </nav>
     </header>

@@ -1,7 +1,10 @@
 {% extends 'template.html' %}
+{% block title %}
+<title>Upload your Photobook!</title>
+{% endblock %}
 {% block body %}
     <div style="text-align: center;">
-        <form method=POST id="submitform" enctype=multipart/form-data action="{{ url_for('upload') }}">
+        <form class="subform" method=POST id="submitform" enctype=multipart/form-data action="{{ url_for('upload') }}">
             <input type="text" name="book_name" placeholder="Photobook name"> <br>
             <input type=file id="submitfiles" name=photo multiple style="display: none;"> <br>
             <label for="submitfiles"><span style="font-size: x-large">Click Here To Submit files </span></label> <br>
