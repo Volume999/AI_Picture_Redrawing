@@ -1,65 +1,14 @@
 from flask import Flask, render_template, url_for, request, redirect, escape, session, flash
-from flask_sqlalchemy import SQLAlchemy
 from flask_uploads import UploadSet, configure_uploads, IMAGES
-from PIL import Image
-from resizeimage import resizeimage
-import os
-import datetime
+from db import db, User, Photo, Photobook, UserFollowsBooks, reinitialize
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-db = SQLAlchemy(app)
 app.secret_key = b'Alibek'
 
+db.init_app(app=app)
+
 cards_per_page = 6
-
-
-class User(db.Model):
-    userId = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(30), nullable=False)
-    password = db.Column(db.String(30), nullable=False)
-
-    def __repr__(self):
-        return f'User {self.username}'
-
-
-class Photobook(db.Model):
-    photobookId = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    photobookName = db.Column(db.String(20), nullable=False)
-    description = db.Column(db.String(100), nullable=True)
-    ownerId = db.Column(db.Integer, nullable=False)
-    isPrivate = db.Column(db.Boolean, default=False)
-    dateCreated = db.Column(db.Date, default=datetime.datetime.utcnow())
-    isDeleted = db.Column(db.Boolean, default=False)
-
-    def __repr__(self):
-        return f'Photobook {self.photobookName}'
-
-
-class Photo(db.Model):
-    photoId = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    photoName = db.Column(db.String(1000), nullable=False)
-    photobookId = db.Column(db.Integer, nullable=False)
-
-    def __repr__(self):
-        return f'Photo {self.photoName}'
-
-
-class UserFollowsBooks(db.Model):
-    ufbId = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    userId = db.Column(db.Integer, nullable=False)
-    photobookId = db.Column(db.Integer, nullable=False)
-
-    def __repr__(self):
-        return f'User {self.userId} follow {self.photobookId}'
-
-
-def reinitialize(db):
-    db.drop_all()
-    db.create_all()
-    us = User(username='admin', password='123')
-    db.session.add(us)
-    db.session.commit()
 
 
 @app.route('/logout', methods=['POST', 'GET'])
@@ -70,20 +19,23 @@ def logout():
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    books = Photobook.query.limit(cards_per_page).all()
+    books = Photobook.query.filter_by(isPrivate=False).limit(cards_per_page).all()
+
     def getFirstPhoto(photobookId):
         return Photo.query.join(Photobook, Photobook.photobookId == Photo.photobookId).filter(
-        Photobook.photobookId == photobookId).first()
-    firstPhoto = {b.photobookId: getFirstPhoto(b.photobookId).photoName if getFirstPhoto(b.photobookId) is not None else 'default.jpg' for b in books}
-    print(firstPhoto)
+            Photobook.photobookId == photobookId).first()
+
+    firstPhoto = {b.photobookId: getFirstPhoto(b.photobookId).photoName if getFirstPhoto(
+        b.photobookId) is not None else 'default.jpg' for b in books}
     return render_template('index.html', books=books, firstPhoto=firstPhoto)
 
 
 @app.route('/view_book/<int:id>')
 def view_book(id):
-    photos = Photo.query.filter_by(photobookId=id).limit(cards_per_page)
+    photos = Photo.query.filter_by(photobookId=id).limit(cards_per_page).all()
     photobook = Photobook.query.filter_by(photobookId=id).first()
     author = User.query.filter_by(userId=photobook.ownerId).first()
+    print(photos, photobook, author)
     return render_template('view_book.html', photos=photos, photobook=photobook, author=author)
 
 
@@ -99,25 +51,33 @@ def upload():
     if request.method == 'POST':
         photobook_name = request.form['book_name']
         desc = request.form['desc']
+        isPrivate = request.form['isPrivate'] == 'private'
         # Photos
         files = request.files.getlist("photo")
-        filename = []
+        filenames = []
         pb = Photobook(photobookName=photobook_name,
                        description=desc,
-                       ownerId=session['id'])
+                       ownerId=session['id'],
+                       isPrivate=isPrivate)
         db.session.add(pb)
         db.session.commit()
+        badext = False
         if any(f for f in files):
             for file in files:
-                fn = photos.save(file)
-                print(fn)
-                filename.append(fn)
-                photo = Photo(
-                    photoName=fn, photobookId=pb.photobookId
-                )
-                db.session.add(photo)
+                filename = file.filename
+                if filename.split('.')[-1] not in ('png', 'jpg', 'jpeg'):
+                    badext = True
+                else:
+                    fn = photos.save(file)
+                    filenames.append(fn)
+                    photo = Photo(
+                        photoName=fn, photobookId=pb.photobookId
+                    )
+                    db.session.add(photo)
         db.session.commit()
         flash('Your photobook has been added!')
+        if badext:
+            flash('Some of your photos have not been added!')
         return redirect(url_for('index'))
         # return ' '.join([photobook_name, description, ' '.join(filename)])
     return render_template('upload.html')
@@ -148,6 +108,15 @@ def register():
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('register.html')
+
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    pb = Photobook.query.filter_by(photobookId=id).first()
+    db.session.delete(pb)
+    db.session.commit()
+    flash('Photobook has been deleted!')
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":

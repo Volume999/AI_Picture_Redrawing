@@ -12,7 +12,7 @@
     </span>
 </div>
 <div class="cards">
-    {% for photo in firstPhotos %}
+    {% for photo in photos %}
     <div class="square" style="background-image:url({{url_for('static', filename='/img/' + photo.photoName)}});background-size: 100% 100%;background-repeat: no-repeat" ></div>
     {% endfor %}
 </div>
@@ -20,7 +20,8 @@
     <a href="{{ url_for('index') }}">Back</a>
     <div style="text-align: center;">
         <a href="#">Edit</a>
-        <a href="#">Delete</a>
+        <a href="{{ url_for('delete',id=photobook.photobookId) }}">Delete</a>
+        <a href="#">Follow</a>
     </div>
     <a href="#">Next page</a>
 </footer>

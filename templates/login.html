@@ -5,8 +5,8 @@
 {% block body %}
     <div style="text-align: center;">
         <form class="subform" method=POST id="login" enctype=multipart/form-data action="{{ url_for('login') }}">
-            <input type="text" name="username" placeholder="Username" maxlength="30"> <br>
-            <input type="text" name="password" placeholder="Password" maxlength="30"> <br>
+            <input type="text" name="username" placeholder="Username" maxlength="30" required> <br>
+            <input type="text" name="password" placeholder="Password" maxlength="30" required> <br>
             <input type="submit">
         </form>
     </div>
