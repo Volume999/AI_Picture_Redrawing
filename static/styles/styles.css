@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
-
 * {
 box-sizing: border-box;
 margin: 0;
@@ -65,4 +64,8 @@ header, footer {
 
 .subform label:hover {
     color:blue;
+}
+
+a:hover {
+    color:lightblue;
 }

@@ -11,8 +11,12 @@
         <span style="color: white; "><label>Photobooks Online</label></span>
         <nav>
             <ul class="nav__links">
+                {% if 'username' not in session.keys() %}
                 <li><a href="{{ url_for('login') }}">Log in</a></li>
                 <li><a href="{{ url_for('register') }}">Sign up</a></li>
+                {% else %}
+                <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

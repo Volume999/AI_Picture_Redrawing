@@ -5,19 +5,16 @@
 {% block body %}
 <div style="margin-left: 20px;" align="left">
     <span style="color:white;">
-        Photobook name: <br>
-        Author: <br>
-        Date Created: <br>
-        Description: <br>
+        Photobook name: {{ photobook.photobookName }}<br>
+        Author: {{ author.username }}<br>
+        Date Created: {{ photobook.dateCreated }}<br>
+        Description: {{ photobook.description }}<br>
     </span>
 </div>
 <div class="cards">
-    <div class="square" style="background-image:url({{url_for('static', filename='/img/not_resized.png')}});background-size: 100% 100%;background-repeat: no-repeat" ></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
+    {% for photo in firstPhotos %}
+    <div class="square" style="background-image:url({{url_for('static', filename='/img/' + photo.photoName)}});background-size: 100% 100%;background-repeat: no-repeat" ></div>
+    {% endfor %}
 </div>
 <footer>
     <a href="{{ url_for('index') }}">Back</a>

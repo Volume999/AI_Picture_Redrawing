@@ -3,6 +3,15 @@
     <title>Photobooks Online</title>
 {% endblock %}
 {% block body %}
+    <ul class="flashes">
+    {% with messages = get_flashed_messages(with_categories = true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    </ul>
 <div style="margin-left: 20px;">
     <div style="text-align: center;">
         <a href="#">Your Collection</a>
@@ -12,11 +21,8 @@
     <a href="{{ url_for('upload') }}">Add Photobook</a>
 </div>
 <div class="cards">
-    <a href="{{ url_for('view_book') }}"> <div class="square"></div> </a>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
+    {% for book in books %}
+        <a href="{{ url_for('view_book', id=book.photobookId) }}"> <div class="square" style="background-image:url({{url_for('static', filename='/img/' + firstPhoto[book.photobookId])}});background-size: 100% 100%;background-repeat: no-repeat" ></div> </a>
+    {% endfor %}
 </div>
 {% endblock %}
