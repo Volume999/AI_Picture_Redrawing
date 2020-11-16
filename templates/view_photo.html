@@ -1,0 +1,14 @@
+{% extends 'template.html' %}
+{% block title %} <title>View Photo</title> {% endblock %}
+{% block body %}
+    <div style="margin-left: 20px;" align="left">
+        <span style="color:white;">
+            Photo name: {{ photo.photoName }}<br>
+        </span>
+    </div>
+    <br>
+    <img style="width: 100%;height: 100%;" src="{{url_for('static', filename='/img/' + photo.photoName)}}">
+    <footer>
+    <a href="{{ url_for('view_book', id=photo.photobookId) }}">Back</a>
+</footer>
+{% endblock %}

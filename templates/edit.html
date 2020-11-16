@@ -1,0 +1,17 @@
+{% extends 'template.html' %}
+{% block title %}
+<title>Edit photobook</title>
+{% endblock %}
+{% block body %}
+<div style="text-align: center;">
+    <form class="subform" method=POST id="submitform" enctype=multipart/form-data>
+        <input type="text" name="book_name" value="{{ photobook.photobookName }}" required> <br>
+        <input type="radio" class="radioButton" id="private" value="private" name="isPrivate"{% if photobook.isPrivate %} checked {% endif %}>
+        <label for="private">Private</label>
+        <input type="radio" class="radioButton" id="public" value="public" name="isPrivate" {% if not photobook.isPrivate %} checked {% endif %}>
+        <label for="public">Public</label><br>
+        <textarea name="desc" form="submitform" maxlength="100">{{ photobook.description }}</textarea> <br>
+        <input type="submit">
+    </form>
+</div>
+{% endblock %}

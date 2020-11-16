@@ -12,14 +12,16 @@
         {% endif %}
     {% endwith %}
     </ul>
+{% if 'id' in session.keys() %}
 <div style="margin-left: 20px;">
     <div style="text-align: center;">
-        <a href="#">Your Collection</a>
-        <a href="#">Public</a>
-        <a href="#">Following</a>
+        <a href="{{ url_for('index',filter='yourCollection') }}">Your Collection</a>
+        <a href="{{ url_for('index',filter='public') }}">Public</a>
+        <a href="{{ url_for('index',filter='following') }}">Following</a>
     </div>
     <a href="{{ url_for('upload') }}">Add Photobook</a>
 </div>
+{% endif %}
 <div class="cards">
     {% for book in books %}
         <a href="{{ url_for('view_book', id=book.photobookId) }}"> <div class="square" style="background-image:url({{url_for('static', filename='/img/' + firstPhoto[book.photobookId])}});background-size: 100% 100%;background-repeat: no-repeat" ></div> </a>

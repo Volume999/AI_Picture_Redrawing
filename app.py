@@ -10,16 +10,22 @@ db.init_app(app=app)
 
 cards_per_page = 6
 
-
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
     session.clear()
     return redirect(url_for('index'))
 
-
-@app.route('/', methods=['POST', 'GET'])
-def index():
-    books = Photobook.query.filter_by(isPrivate=False).limit(cards_per_page).all()
+@app.route('/')
+@app.route('/<string:filter>', methods=['POST', 'GET'])
+def index(filter='public'):
+    if filter == 'yourCollection':
+        books = Photobook.query.filter_by(ownerId=session['id']).limit(cards_per_page).all()
+    elif filter == 'following':
+        books = Photobook.query\
+            .join(UserFollowsBooks, Photobook.photobookId == UserFollowsBooks.photobookId).\
+            filter(UserFollowsBooks.userId == session['id']).filter(Photobook.isPrivate==False).limit(cards_per_page).all()
+    else:
+        books = Photobook.query.filter_by(isPrivate=False).limit(cards_per_page).all()
 
     def getFirstPhoto(photobookId):
         return Photo.query.join(Photobook, Photobook.photobookId == Photo.photobookId).filter(
@@ -112,11 +118,54 @@ def register():
 
 @app.route('/delete/<int:id>')
 def delete(id):
+    # photobook
     pb = Photobook.query.filter_by(photobookId=id).first()
     db.session.delete(pb)
+    # photos
+    ps = Photo.query.filter_by(photobookId=id).all()
+    for p in ps:
+        db.session.delete(p)
+    # follows
+    ufp = UserFollowsBooks.query.filter_by(photobookId=id).all()
+    for u in ufp:
+        db.session.delete(u)
+    #commit
     db.session.commit()
     flash('Photobook has been deleted!')
     return redirect(url_for('index'))
+
+
+@app.route('/follow/<int:id>')
+def follow(id):
+    ufb = UserFollowsBooks(userId=session['id'], photobookId=id)
+    db.session.add(ufb)
+    db.session.commit()
+    flash('Successfully followed a book')
+    return redirect(url_for('index'))
+
+
+@app.route('/edit/<int:id>', methods=['POST', 'GET'])
+def edit(id):
+    photobook = Photobook.query.filter_by(photobookId=id).first()
+    if request.method == 'POST':
+        name = request.form['book_name']
+        isPrivate = request.form['isPrivate']
+        desc = request.form['desc']
+        photobook.photobookName = name
+        photobook.isPrivate = isPrivate == 'private'
+        photobook.description = desc
+        db.session.commit()
+        flash('photobook Updated successfully!')
+        return redirect(url_for('index'))
+    else:
+        return render_template('edit.html', photobook=photobook)
+
+
+@app.route('/view_photo/<int:id>')
+def view_photo(id):
+    photo = Photo.query.filter_by(photoId=id).first()
+    return render_template('view_photo.html', photo=photo)
+
 
 
 if __name__ == "__main__":
