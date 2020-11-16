@@ -1,6 +1,11 @@
 # Photobooks Online
 Photobooks online is a web application designed to store and share your photos packed (thematically, or else) inside photobooks, share them with others, as well as follow other people's photobooks
 
+Project was made using Agile methodology (Scrum Framework) using Atlassian's Jira software
+App design was made in Figma
+Database ERM in Lucidchart
+VCS Usign Git / Github
+
 ## Installation
 1. Clone the repository
 2. install the packages required (from requirements.txt)
