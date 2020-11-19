@@ -13,7 +13,7 @@
 </div>
 <div class="cards">
     {% for photo in photos %}
-    <a href="{{ url_for('view_photo', id=photo.photoId) }}"><div class="square" style="background-image:url({{url_for('static', filename='/img/' + photo.photoName)}});background-size: 100% 100%;background-repeat: no-repeat" ></div></a>
+    <a href="{{ url_for('view_photo', id=photo.photoId) }}"><div class="square" style="background-image:url({{url_for('static', filename='img/' + photo.photoName)}});background-size: 100% 100%;background-repeat: no-repeat" ></div></a>
     {% endfor %}
 </div>
     {% if 'id' in session.keys() %}
