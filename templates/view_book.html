@@ -20,8 +20,10 @@
 <footer>
     <a href="{{ url_for('index') }}">Back</a>
     <div style="text-align: center;">
-        <a href="{{ url_for('edit',id=photobook.photobookId) }}">Edit</a>
-        <a href="{{ url_for('delete',id=photobook.photobookId) }}">Delete</a>
+        {% if photobook.ownerId == session['id'] %}
+            <a href="{{ url_for('edit',id=photobook.photobookId) }}">Edit</a>
+            <a href="{{ url_for('delete',id=photobook.photobookId) }}">Delete</a>
+        {% endif %}
         <a href="{{ url_for('follow',id=photobook.photobookId) }}">Follow</a>
     </div>
     <a href="#">Next page</a>
