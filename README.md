@@ -19,19 +19,20 @@ VCS Usign Git / Github <br>
   ```bash
   pip install -r requirements.txt
   ```
-3. Run the app:
-```bash
-export FLASK_APP=app.py
-flask run
-```
-4. for clearing the database:
+3. Create the database (You can clear it the same way):
 ```bash
 python3
 from app import app, db, reinitialize
 with app.app_context():
   reinitialize(db)
-
 ```
+
+4. Run the app:
+```bash
+export FLASK_APP=app.py
+flask run
+```
+
 ## Usage:
 Flask app manages the application on localhost:5000 (or 5001 if that is closed and so on)
 
