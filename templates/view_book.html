@@ -19,13 +19,14 @@
 <footer>
     <a href="{{ url_for('index') }}">Back</a>
     {% if 'id' in session.keys() %}
-        <div style="text-align: center;">
-            {% if photobook.ownerId == session['id'] %}
-                <a href="{{ url_for('edit',id=photobook.photobookId) }}">Edit</a>
-                <a href="{{ url_for('delete',id=photobook.photobookId) }}">Delete</a>
-            {% endif %}
-            <a href="{{ url_for('follow',id=photobook.photobookId) }}">Follow</a>
-        </div>
-    {% endif %}
+    <div style="text-align: center;">
+        {% if photobook.ownerId == session['id'] %}
+            <a href="{{ url_for('edit',id=photobook.photobookId) }}">Edit</a>
+            <a href="{{ url_for('delete',id=photobook.photobookId) }}">Delete</a>
+        {% endif %}
+        <a href="{{ url_for('follow',id=photobook.photobookId) }}">Follow</a>
+    </div>
+    <a href="#"></a>
 </footer>
+    {% endif %}
 {% endblock %}
