@@ -24,7 +24,7 @@
 {% endif %}
 <div class="cards">
     {% for book in books %}
-        <a href="{{ url_for('view_book', id=book.photobookId) }}"> <div class="square" style="background-image:url({{url_for('static', filename='/img/' + firstPhoto[book.photobookId])}});background-size: 100% 100%;background-repeat: no-repeat" ></div> </a>
+        <a href="{{ url_for('view_book', id=book.photobookId) }}"> <div class="square" style="background-image:url({{url_for('static', filename='img/' + firstPhoto[book.photobookId])}});background-size: 100% 100%;background-repeat: no-repeat" ></div> </a>
     {% endfor %}
 </div>
 {% endblock %}
