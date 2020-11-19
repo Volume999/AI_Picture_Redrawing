@@ -112,7 +112,8 @@ def register():
         user = User(username=name, password=pwd)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('login'))
+        flash('Registration successful, please log in')
+        return redirect(url_for('index'))
     return render_template('register.html')
 
 
