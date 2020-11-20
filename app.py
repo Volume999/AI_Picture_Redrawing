@@ -2,32 +2,40 @@ from flask import Flask, render_template, url_for, request, redirect, escape, se
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 from db import db, User, Photo, Photobook, UserFollowsBooks, reinitialize
 
+# initializing flask app
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.secret_key = b'Alibek'
 
+#initialize db
 db.init_app(app=app)
 
+#For now, static pages
 cards_per_page = 6
+
 
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
     session.clear()
     return redirect(url_for('index'))
 
+
 @app.route('/')
-@app.route('/<string:filter>', methods=['POST', 'GET'])
-def index(filter='public'):
-    if filter == 'yourCollection':
+@app.route('/<index_filter>', methods=['POST', 'GET'])
+def index(index_filter='public'):
+    #filter depending on GET flag
+    if index_filter == 'yourCollection':
         books = Photobook.query.filter_by(ownerId=session['id']).limit(cards_per_page).all()
-    elif filter == 'following':
-        books = Photobook.query\
-            .join(UserFollowsBooks, Photobook.photobookId == UserFollowsBooks.photobookId).\
-            filter(UserFollowsBooks.userId == session['id']).filter(Photobook.isPrivate==False).limit(cards_per_page).all()
+    elif index_filter == 'following':
+        books = Photobook.query \
+            .join(UserFollowsBooks, Photobook.photobookId == UserFollowsBooks.photobookId). \
+            filter(UserFollowsBooks.userId == session['id']).filter(Photobook.isPrivate == False).limit(
+            cards_per_page).all()
     else:
         books = Photobook.query.filter_by(isPrivate=False).limit(cards_per_page).all()
 
     def getFirstPhoto(photobookId):
+        # database query
         return Photo.query.join(Photobook, Photobook.photobookId == Photo.photobookId).filter(
             Photobook.photobookId == photobookId).first()
 
@@ -44,7 +52,7 @@ def view_book(id):
     print(photos, photobook, author)
     return render_template('view_book.html', photos=photos, photobook=photobook, author=author)
 
-
+#uploading photos
 photos = UploadSet('photos', IMAGES)
 
 UPLOAD_PHOTO_DEST = 'static/img'
@@ -54,6 +62,7 @@ configure_uploads(app, photos)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
+    # Creating a photobook
     if request.method == 'POST':
         photobook_name = request.form['book_name']
         desc = request.form['desc']
@@ -91,6 +100,7 @@ def upload():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    #Login page
     if request.method == 'POST':
         username, password = request.form['username'], request.form['password']
         query = User.query.filter_by(username=username).filter_by(password=password).all()
@@ -119,6 +129,7 @@ def register():
 
 @app.route('/delete/<int:id>')
 def delete(id):
+    #Deleting photobook
     # photobook
     pb = Photobook.query.filter_by(photobookId=id).first()
     db.session.delete(pb)
@@ -130,7 +141,7 @@ def delete(id):
     ufp = UserFollowsBooks.query.filter_by(photobookId=id).all()
     for u in ufp:
         db.session.delete(u)
-    #commit
+    # commit
     db.session.commit()
     flash('Photobook has been deleted!')
     return redirect(url_for('index'))
@@ -138,6 +149,7 @@ def delete(id):
 
 @app.route('/follow/<int:id>')
 def follow(id):
+    #Following photobooks
     ufb = UserFollowsBooks(userId=session['id'], photobookId=id)
     db.session.add(ufb)
     db.session.commit()
@@ -147,6 +159,7 @@ def follow(id):
 
 @app.route('/edit/<int:id>', methods=['POST', 'GET'])
 def edit(id):
+    #Editing photobooks
     photobook = Photobook.query.filter_by(photobookId=id).first()
     if request.method == 'POST':
         name = request.form['book_name']
@@ -164,9 +177,9 @@ def edit(id):
 
 @app.route('/view_photo/<int:id>')
 def view_photo(id):
+    #View photo tab
     photo = Photo.query.filter_by(photoId=id).first()
     return render_template('view_photo.html', photo=photo)
-
 
 
 if __name__ == "__main__":
