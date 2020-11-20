@@ -21,12 +21,13 @@ def logout():
 
 
 @app.route('/')
-@app.route('/<index_filter>', methods=['POST', 'GET'])
-def index(index_filter='public'):
+@app.route('/<filter>', methods=['POST', 'GET'])
+def index(filter='public'):
+    flash(session['id'])
     #filter depending on GET flag
-    if index_filter == 'yourCollection':
+    if filter == 'yourCollection':
         books = Photobook.query.filter_by(ownerId=session['id']).limit(cards_per_page).all()
-    elif index_filter == 'following':
+    elif filter == 'following':
         books = Photobook.query \
             .join(UserFollowsBooks, Photobook.photobookId == UserFollowsBooks.photobookId). \
             filter(UserFollowsBooks.userId == session['id']).filter(Photobook.isPrivate == False).limit(
