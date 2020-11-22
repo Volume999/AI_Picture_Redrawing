@@ -10,6 +10,9 @@ App design was made in Figma <br>
 Database ERM in Lucidchart <br> 
 ![](https://i.ibb.co/2FK0Y4P/photo-2020-11-19-10-59-07.jpg)
 
+Testing
+Testing was realized as a separate sprint with all of the existing functionalities. We decided to not automate the process because doing so would slow down our actual software development progress, as configuring automation of tests would take more time than the actual development.
+
 VCS Usign Git / Github <br>
 
 ## Installation
