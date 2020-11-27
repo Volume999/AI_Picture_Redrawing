@@ -15,7 +15,7 @@ Testing was realized as a separate sprint with all of the existing functionaliti
 
 VCS Usign Git / Github <br>
 
-## Project Tech Stacl
+## Project Tech Stack
 Database: SQLite <br>
 Server: Python, Flask <br>
 Interface: HTML, CSS <br>
