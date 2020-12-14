@@ -3,30 +3,39 @@
 <title>View the Photobook!</title>
 {% endblock %}
 {% block body %}
-<div style="margin-left: 20px;" align="left">
-    <span style="color:white;">
-        Photobook name: {{ photobook.photobookName }}<br>
-        Author: {{ author.username }}<br>
-        Date Created: {{ photobook.dateCreated }}<br>
-        Description: {{ photobook.description }}<br>
-    </span>
+<div class="container-fluid tm-container-content tm-mt-60">
+        <div class="row mb-4">
+            <h5 class="col-6 tm-text-primary">
+                Photobook name: {{ photobook.photobookName }}<br>
+                Author: {{ author.username }}<br>
+                Date Created: {{ photobook.dateCreated }}<br>
+                Description: {{ photobook.description }}<br>
+            </h5>
+        </div>
+        <footer>
+            <a href="{{ url_for('index') }}" style="font-size: 20px;" class="tm-text-primary mr-4 mb-2 d-inline-block">Back</a>
+            {% if 'id' in session.keys() %}
+            <div style="text-align: center;">
+                {% if photobook.ownerId == session['id'] %}
+                    <a href="{{ url_for('edit',id=photobook.photobookId) }}" style="font-size: 20px;" class="tm-text-primary mr-4 mb-2 d-inline-block">Edit</a>
+                    <a href="{{ url_for('delete',id=photobook.photobookId) }}" style="font-size: 20px;" class="tm-text-primary mr-4 mb-2 d-inline-block">Delete</a>
+                {% endif %}
+                <a href="{{ url_for('follow',id=photobook.photobookId) }}" style="font-size: 20px;" class="tm-text-primary mr-4 mb-2 d-inline-block">Follow</a>
+            </div>
+            <a href="#"></a>
+            {% endif %}
+        </footer>
+        <div class="row tm-mb-90 tm-gallery">
+            {% for photo in photos %}
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                <figure class="effect-ming tm-video-item">
+                    <img src="{{url_for('static', filename='img/' + photo.photoName)}}" alt="Image" class="img-fluid">
+                    <figcaption class="d-flex align-items-center justify-content-center">
+                        <a href="{{ url_for('view_photo', id=photo.photoId) }}">Expand the image</a>
+                    </figcaption>                    
+                </figure>
+            </div>
+            {% endfor %}
+        </div>
 </div>
-<div class="cards">
-    {% for photo in photos %}
-    <a href="{{ url_for('view_photo', id=photo.photoId) }}"><div class="square" style="background-image:url({{url_for('static', filename='img/' + photo.photoName)}});background-size: 100% 100%;background-repeat: no-repeat" ></div></a>
-    {% endfor %}
-</div>
-<footer>
-    <a href="{{ url_for('index') }}">Back</a>
-    {% if 'id' in session.keys() %}
-    <div style="text-align: center;">
-        {% if photobook.ownerId == session['id'] %}
-            <a href="{{ url_for('edit',id=photobook.photobookId) }}">Edit</a>
-            <a href="{{ url_for('delete',id=photobook.photobookId) }}">Delete</a>
-        {% endif %}
-        <a href="{{ url_for('follow',id=photobook.photobookId) }}">Follow</a>
-    </div>
-    <a href="#"></a>
-</footer>
-    {% endif %}
 {% endblock %}

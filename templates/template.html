@@ -2,24 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/css/bootstrap.min.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/fontawesome/css/all.min.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/css/templatemo-style.css') }}">
     {% block title %} {% endblock %}
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/styles.css') }}">
 </head>
 <body>
-    <header>
-        <a href="{{ url_for('index') }}"><span style="color: white; "><img style="height:50px; width:auto;" src="{{ url_for('static', filename='Auca_logo.png') }}" alt="Auca Logo"></span></a>
-        <span style="color: white; "><label>Photobooks Online</label></span>
-        <nav>
-            <ul class="nav__links">
+    <!-- Page Loader -->
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
+    </div>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-camera"></i>
+                Photobooks
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link nav-link-1 active" aria-current="page" href="{{ url_for('index') }}">Photos</a>
+                </li>
+
                 {% if 'username' not in session.keys() %}
-                <li><a href="{{ url_for('login') }}">Log in</a></li>
-                <li><a href="{{ url_for('register') }}">Sign up</a></li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-2 active" href="{{ url_for('login') }}">Log in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-3 active" href="{{ url_for('register') }}">Sign up</a>
+                </li>
                 {% else %}
-                <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-2 active" href="{{ url_for('logout') }}">Log Out</a>
+                </li>
                 {% endif %}
             </ul>
-        </nav>
-    </header>
+            </div>
+        </div>
+    </nav>
+
+    <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="{{ url_for('static', filename='img/hero.jpg') }}">
+    </div>
+
     {% block body %} {% endblock %}
+    <script src="{{ url_for('static', filename='styles/js/plugins.js') }}"></script>
+    <script>
+        $(window).on("load", function() {
+            $('body').addClass('loaded');
+        });
+    </script>
+    
 </body>
 </html>

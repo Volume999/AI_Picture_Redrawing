@@ -23,7 +23,7 @@ def logout():
 @app.route('/')
 @app.route('/<filter>', methods=['POST', 'GET'])
 def index(filter='public'):
-    flash(session['id'])
+    #flash(session['id'])
     #filter depending on GET flag
     if filter == 'yourCollection':
         books = Photobook.query.filter_by(ownerId=session['id']).limit(cards_per_page).all()

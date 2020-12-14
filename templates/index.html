@@ -3,28 +3,49 @@
     <title>Photobooks Online</title>
 {% endblock %}
 {% block body %}
-    <ul class="flashes">
     {% with messages = get_flashed_messages(with_categories = true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
+                <div class="text-center">
+                    <p class="text-success">{{ message }}</p>
+                </div>
             {% endfor %}
         {% endif %}
     {% endwith %}
-    </ul>
 {% if 'id' in session.keys() %}
+<div style="text-align: center;">
+    <a href="{{ url_for('index',filter='yourCollection') }}" style="font-size: 20px;" class="tm-text-primary mr-4 mb-2 d-inline-block">Your Collection</a>
+    <a href="{{ url_for('index',filter='public') }}" style="font-size: 20px;" class="tm-text-primary mr-4 mb-2 d-inline-block">Public</a>
+    <a href="{{ url_for('index',filter='following') }}" style="font-size: 20px;" class="tm-text-primary mr-4 mb-2 d-inline-block">Following</a>
+</div>
 <div style="margin-left: 20px;">
-    <div style="text-align: center;">
-        <a href="{{ url_for('index',filter='yourCollection') }}">Your Collection</a>
-        <a href="{{ url_for('index',filter='public') }}">Public</a>
-        <a href="{{ url_for('index',filter='following') }}">Following</a>
-    </div>
-    <a href="{{ url_for('upload') }}">Add Photobook</a>
+    <a href="{{ url_for('upload') }}" style="font-size: 20px;" class="tm-text-primary mr-4 mb-2 d-inline-block">Add Photobook</a>
 </div>
 {% endif %}
-<div class="cards">
-    {% for book in books %}
-        <a href="{{ url_for('view_book', id=book.photobookId) }}"> <div class="square" style="background-image:url({{url_for('static', filename='img/' + firstPhoto[book.photobookId])}});background-size: 100% 100%;background-repeat: no-repeat" ></div> </a>
-    {% endfor %}
-</div>
+
+    <div class="container-fluid tm-container-content tm-mt-60">
+        <div class="row mb-4">
+            <h2 class="col-6 tm-text-primary">
+                Photobooks
+            </h2>
+        </div>
+        <div class="row tm-mb-90 tm-gallery">
+        {% for book in books %}
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                <figure class="effect-ming tm-video-item">
+                    <img src="{{url_for('static', filename='img/' + firstPhoto[book.photobookId])}}" alt="Image" class="img-fluid">
+                    <figcaption class="d-flex align-items-center justify-content-center">
+                        <h2>{{book.photobookName}}</h2>
+                        <a href="{{ url_for('view_book', id=book.photobookId) }}">View more</a>
+                    </figcaption>                    
+                </figure>
+                <div class="d-flex justify-content-between tm-text-gray">
+                    <span>Description: {{book.description}}</span>
+                    <span class="tm-text-gray-light">{{book.dateCreated}}</span>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+
 {% endblock %}
