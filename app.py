@@ -7,10 +7,10 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.secret_key = b'Alibek'
 
-#initialize db
+# initialize db
 db.init_app(app=app)
 
-#For now, static pages
+# For now, static pages
 cards_per_page = 6
 
 
@@ -23,8 +23,9 @@ def logout():
 @app.route('/')
 @app.route('/<filter>', methods=['POST', 'GET'])
 def index(filter='public'):
-    #flash(session['id'])
-    #filter depending on GET flag
+    # flash(session['id'])
+    # flash(session['id'])
+    # filter depending on GET flag
     if filter == 'yourCollection':
         books = Photobook.query.filter_by(ownerId=session['id']).limit(cards_per_page).all()
     elif filter == 'following':
@@ -50,10 +51,13 @@ def view_book(id):
     photos = Photo.query.filter_by(photobookId=id).limit(cards_per_page).all()
     photobook = Photobook.query.filter_by(photobookId=id).first()
     author = User.query.filter_by(userId=photobook.ownerId).first()
-    print(photos, photobook, author)
-    return render_template('view_book.html', photos=photos, photobook=photobook, author=author)
+    is_following = False if 'id' not in session.keys() \
+        else UserFollowsBooks.query.filter_by(userId=session['id']).filter_by(photobookId=id).first() is not None
+    # print(photos, photobook, author)
+    return render_template('view_book.html', photos=photos, photobook=photobook, author=author, is_following=is_following)
 
-#uploading photos
+
+# uploading photos
 photos = UploadSet('photos', IMAGES)
 
 UPLOAD_PHOTO_DEST = 'static/img'
@@ -101,7 +105,7 @@ def upload():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    #Login page
+    # Login page
     if request.method == 'POST':
         username, password = request.form['username'], request.form['password']
         query = User.query.filter_by(username=username).filter_by(password=password).all()
@@ -130,7 +134,7 @@ def register():
 
 @app.route('/delete/<int:id>')
 def delete(id):
-    #Deleting photobook
+    # Deleting photobook
     # photobook
     pb = Photobook.query.filter_by(photobookId=id).first()
     db.session.delete(pb)
@@ -150,7 +154,7 @@ def delete(id):
 
 @app.route('/follow/<int:id>')
 def follow(id):
-    #Following photobooks
+    # Following photobooks
     ufb = UserFollowsBooks(userId=session['id'], photobookId=id)
     db.session.add(ufb)
     db.session.commit()
@@ -160,7 +164,7 @@ def follow(id):
 
 @app.route('/edit/<int:id>', methods=['POST', 'GET'])
 def edit(id):
-    #Editing photobooks
+    # Editing photobooks
     photobook = Photobook.query.filter_by(photobookId=id).first()
     if request.method == 'POST':
         name = request.form['book_name']
@@ -178,7 +182,7 @@ def edit(id):
 
 @app.route('/view_photo/<int:id>')
 def view_photo(id):
-    #View photo tab
+    # View photo tab
     photo = Photo.query.filter_by(photoId=id).first()
     return render_template('view_photo.html', photo=photo)
 
